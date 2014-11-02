@@ -58,7 +58,7 @@ public class TimeBar extends View {
 
     protected LocalTime fractionToTime(float fraction) {
         int hours = (int) Math.floor(fraction * 24);
-        int minutes = (int) Math.floor( (fraction * 24 ) % 1 );
+        int minutes = (int) ((fraction * 24  )%1)*60;
 
         return new LocalTime(hours, minutes);
     }
@@ -100,7 +100,7 @@ public class TimeBar extends View {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
-        paint.setTextSize(20);
+        paint.setTextSize(25);
 
         float left_bound = x1 - getBarWidth() - 30;
         float right_bound = x1 - 30;
