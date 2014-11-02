@@ -92,6 +92,35 @@ public class TimeBar extends View {
         }
     }
 
+    //method to draw time in XX:YY format to left of upper and lower handles of timeslots
+    protected void drawFloatingTime(TimeSlot slot, float y1, float y2, float x1, Canvas canvas) {
+
+        Paint paint = new Paint();
+        paint.setAlpha(255);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setColor(Color.BLACK);
+        paint.setTextSize(20);
+
+        float left_bound = x1 - getBarWidth() - 30;
+        float right_bound = x1 - 30;
+
+        LocalTime start = fractionToTime(slot.start);
+        int start_hour = start.getHourOfDay();
+        int start_minute = start.getMinuteOfHour();
+
+        LocalTime end = fractionToTime(slot.end);
+        int end_hour = end.getHourOfDay();
+        int end_minute = end.getMinuteOfHour();
+
+        String start_str = start_hour +":"+ start_minute;
+        String end_str = end_hour +":"+ end_minute;
+
+        canvas.drawText(start_str, left_bound, y1, paint);
+        canvas.drawText(end_str, left_bound, y2, paint);
+
+    }
+
     protected void drawTimeSlot(Canvas canvas, TimeSlot slot, Paint paint) {
 
         if(selected != null && slot == selected.slot) {
@@ -107,6 +136,8 @@ public class TimeBar extends View {
         float x1 = getBarX();
         float x2 = getBarX() + getBarWidth();
 
+        drawFloatingTime(slot, y1, y2, x1, canvas);
+
         canvas.drawRect(
                 x1,
                 y1,
@@ -115,7 +146,7 @@ public class TimeBar extends View {
                 paint);
 
         paint.setColor(Color.BLACK);
-
+        /*
         //draw top and bototm handle
         canvas.drawRect(
                 x1,
@@ -130,6 +161,7 @@ public class TimeBar extends View {
                 x2,
                 y2,
                 paint);
+        */
 
     }
 
