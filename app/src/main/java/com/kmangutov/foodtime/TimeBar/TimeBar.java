@@ -102,7 +102,8 @@ public class TimeBar extends View {
         paint.setColor(Color.BLACK);
         paint.setTextSize(25);
 
-        float left_bound = x1 - getBarWidth() - 30;
+        //modify to scale!!!
+        float left_bound = x1 -  80;
         float right_bound = x1 - 30;
 
         LocalTime start = fractionToTime(slot.start);
