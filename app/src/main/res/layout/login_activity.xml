@@ -35,7 +35,6 @@
             android:fontFamily="sans-serif-light"
             android:id="@+id/textOr" android:layout_below="@+id/button" android:layout_centerHorizontal="true"
             android:layout_marginTop="45dp"/>
-
         <LinearLayout
                 android:orientation="horizontal"
                 android:layout_width="fill_parent"
