@@ -4,7 +4,7 @@
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent"
-              android:background = "@drawable/burger">
+              android:background = "@drawable/burgermask">
 
     <TextView
             android:layout_width="wrap_content"
@@ -20,6 +20,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Get Started!"
+            android:fontFamily="sans-serif-light"
             android:textSize="18dp"
             android:clickable="true"
             android:id="@+id/button"
@@ -31,6 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="OR"
+            android:fontFamily="sans-serif-light"
             android:id="@+id/textOr" android:layout_below="@+id/button" android:layout_centerHorizontal="true"
             android:layout_marginTop="45dp"/>
 
@@ -46,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Username:"
+                android:fontFamily="sans-serif-light"
                 android:id="@+id/textUser" android:layout_below="@+id/textOr" android:layout_toLeftOf="@+id/button"
                 android:layout_marginTop="66dp" android:textColor="#000000" android:textSize="18dp"/>
         <TextView
@@ -53,6 +56,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:text="Password:"
+                android:fontFamily="sans-serif-light"
                 android:textSize="18dp"
                 android:id="@+id/textView3" android:layout_below="@+id/textUser"
                 android:layout_alignStart="@+id/textUser"  android:layout_alignLeft="@+id/textUser"
@@ -82,6 +86,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Submit"
+                android:fontFamily="sans-serif-light"
                 android:id="@+id/buttonSubmit"
                 android:layout_below="@+id/textView3" android:layout_alignLeft="@id/password_input"
                 android:layout_marginTop="28dp" android:layout_alignRight="@+id/button"
