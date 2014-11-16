@@ -27,11 +27,13 @@ public class TimeBar extends View {
     }
 
     public TimeBar(Context context, AttributeSet attrs) {
+
         super(context, attrs);
+        //addDummyTime(3, 15);
     }
 
     protected int mBarWidth = 180;
-    protected int mBarLeftPadding;
+    protected int mBarRightPadding = 60;
 
     // determines what fraction of TimeSlot is required to be clicked to identify top or bottom
     //protected float extremitySelectionThreshold = 0.2f;
@@ -76,11 +78,40 @@ public class TimeBar extends View {
         return new SlotSelection(slot, location);
     }
 
-    protected LocalTime fractionToTime(float fraction) {
-        int hours = (int) Math.floor(fraction * 24);
-        int minutes = (int) Math.floor( (fraction * 24 ) % 1 );
+    protected float timeToFraction(LocalTime time) {
 
-        return new LocalTime(hours, minutes);
+        return time.getHourOfDay()/24.0f + time.getMinuteOfHour()/60.0f/24.0f;
+    }
+
+    protected LocalTime fractionToTime(float fraction) {
+
+        //prevents app from crashing for extreme upper and lower bounds
+        if(fraction < 0)
+            return new LocalTime(0,0);
+        else if(fraction > 1)
+        {
+            return new LocalTime(23,59);
+        }
+        else {
+            int hours = (int) Math.floor(fraction * 24);
+            int minutes = (int) (int) Math.floor(((fraction * 24) % 60 % 1) * 60);
+            return new LocalTime(hours, minutes);
+        }
+    }
+
+    public void addTimeSlot(TimeSlot slot) {
+
+        mTimeSlots.add(slot);
+    }
+
+    public void addDummyTime(int hour, int minute, int color) {
+
+        LocalTime start = new LocalTime(hour, minute);
+        LocalTime end = new LocalTime(hour + 2, minute + 30);
+        TimeSlot slot = new TimeSlot(timeToFraction(start), timeToFraction(end));
+        slot.setColor(color);
+
+        addTimeSlot(slot);
     }
 
     protected int getBarWidth() {
@@ -88,7 +119,7 @@ public class TimeBar extends View {
     }
 
     protected int getBarX() {
-        return getWidth() - getBarWidth();
+        return getWidth() - getBarWidth() - mBarRightPadding;
     }
 
     @Override
@@ -97,6 +128,7 @@ public class TimeBar extends View {
         drawTicks(canvas);
         drawTimeSlots(canvas);
     }
+
 
     protected void drawTimeSlots(Canvas canvas) {
 
@@ -110,15 +142,51 @@ public class TimeBar extends View {
         for(TimeSlot slot : mTimeSlots) {
             drawTimeSlot(canvas, slot, paint);
         }
+
+    }
+
+    protected void drawPreciseTime(Canvas canvas,
+                                   TimeSlot slot,
+                                   Paint paint,
+                                   float x,
+                                   float y1,
+                                   float y2) {
+
+
+
+
+        paint.setTextSize(36);
+        Paint.FontMetrics metrics = paint.getFontMetrics();
+        float yOffset = metrics.ascent + metrics.descent;
+
+        float myX = x - 100;
+        float myWidth = 95;
+        float yPadding = 5;
+
+        String startStr = fracToString(slot.start);
+        String endStr = fracToString(slot.end);
+
+
+        paint.setStyle(Paint.Style.STROKE);
+        paint.setColor(Color.BLACK);
+        paint.setAlpha(255);
+        paint.setStrokeWidth(4);
+
+        System.out.println("yOffset: " + yOffset);
+
+
+        canvas.drawRect(myX - yPadding, y1 - yPadding, myX + myWidth, y1 - yOffset + yPadding, paint);
+        canvas.drawRect(myX - yPadding, y2 - yPadding, myX + myWidth, y2 - yOffset + yPadding, paint);
+
+        paint.setStyle(Paint.Style.FILL);
+        paint.setStrokeWidth(1);
+        paint.setColor(Color.BLACK);
+
+        canvas.drawText(startStr, myX, y1 - yOffset, paint);
+        canvas.drawText(endStr, myX, y2 - yOffset, paint);
     }
 
     protected void drawTimeSlot(Canvas canvas, TimeSlot slot, Paint paint) {
-
-        if(selected != null && slot == selected.slot) {
-            paint.setColor(Color.CYAN);
-        } else {
-            paint.setColor(Color.BLUE);
-        }
 
         float y1 = getHeight()*slot.start;
         float y2 = getHeight()*slot.end;
@@ -127,6 +195,17 @@ public class TimeBar extends View {
         float x1 = getBarX();
         float x2 = getBarX() + getBarWidth();
 
+
+        if(selected != null && slot == selected.slot) {
+            drawPreciseTime(canvas, slot, paint, x1, y1, y2);
+            paint.setColor(Color.GRAY);
+        } else {
+            paint.setColor(slot.color);//Color.BLUE);
+        }
+
+
+        //drawFloatingTime(slot, y1, y2, x1, canvas);
+
         canvas.drawRect(
                 x1,
                 y1,
@@ -134,12 +213,14 @@ public class TimeBar extends View {
                 y2,
                 paint);
 
-        paint.setColor(Color.BLACK);
 
         float dragSectionHeight = getDragSectionHeight(slot);
         float extremitySelectionThreshold = dragSectionHeight / slot.end - slot.start;
 
-        //draw top and bototm handle
+        paint.setColor(Color.LTGRAY);
+        paint.setStyle(Paint.Style.FILL_AND_STROKE);
+
+        //draw top and bottom handle
         canvas.drawRect(
                 x1,
                 y1,
@@ -154,6 +235,47 @@ public class TimeBar extends View {
                 y2,
                 paint);
 
+
+
+        drawAffordanceBars(x1, y1, x2, y1 + dragSectionHeight, canvas, paint);
+
+        drawAffordanceBars(x1, y2 - dragSectionHeight, x2, y2, canvas, paint);
+
+       /* if(clear_time)
+        {
+            clearFloatingTime(slot, canvas);
+        }*/
+    }
+
+    protected void drawAffordanceBars(float x1, float y1, float x2, float y2, Canvas canvas, Paint paint) {
+
+        float w = x2 - x1;
+        float h = y2 - y1;
+
+        float myX1 = x1 + w/5.0f;
+        float myX2 = x2 - w/5.0f;
+
+        float myY1 = y1 + w/5.0f;
+        float myY2 = y2 - w/5.0f;
+
+        float myDY = (myY2 - myY1)/3;
+
+        paint.setColor(Color.BLACK);
+
+        for(int i = 0; i < 3; i++) {
+            float realY = myY1 + myDY * i;
+            canvas.drawLine(myX1, realY, myX2, realY, paint);
+        }
+    }
+
+    // convert fraction of timebar to hour:minute
+    protected String fracToString(float frac) {
+
+        int startHour = fractionToTime(frac).getHourOfDay();
+        int startMinute = fractionToTime(frac).getMinuteOfHour();
+        startHour = (startHour == 12)?12:(startHour % 12);
+
+        return startHour + ":" + String.format("%02d", startMinute);
     }
 
     protected void drawTicks(Canvas canvas) {
@@ -162,13 +284,26 @@ public class TimeBar extends View {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
-        paint.setTextSize(20);
+        float x = getBarX() + getBarWidth() + 10;
 
         for(int i = 0; i < 24; i++) {
 
-            String str = String.format("%02d", i);
+            float y = i*getHeight()/24;
 
-            canvas.drawText(str, getBarX() - 30, 20 + i*getHeight()/24, paint);
+            int timeVal = (i == 12)?12:(i % 12);
+
+            if(i % 3 == 0) {
+                paint.setTextSize(32);
+                paint.setColor(Color.BLACK);
+                canvas.drawLine(getBarX(), y, getBarX() + getBarWidth(), y, paint);
+            }
+            else
+                paint.setTextSize(20);
+
+            String str = String.format("%02d", timeVal);
+
+            //canvas.drawText(str, getBarX() - 40, i*getHeight()/24, paint);
+            canvas.drawText(str, x, y, paint);
         }
     }
 
@@ -188,12 +323,14 @@ public class TimeBar extends View {
 
         for(TimeSlot slot : mTimeSlots) {
             if( slot.start <= fraction &&
-                slot.end >= fraction)
+                    slot.end >= fraction)
                 return touchYFracToSelection(slot, fraction);
         }
 
         return null;
     }
+
+    boolean clear_time = false;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -226,13 +363,16 @@ public class TimeBar extends View {
                             SlotSelection.Location.BOTTOM);
                 }
 
-
+                //System.out.println("ACTION_DOWN");
                 break;
             case MotionEvent.ACTION_UP:
 
                 selected = null;
+                //selected = touchYFracToTimeSlot(yFrac);
 
                 /*  unselect selected timeslot */
+                clear_time = true;
+                System.out.println("ACTION_UP");
                 break;
             case MotionEvent.ACTION_MOVE:
                 /*  either change start time (top selected), end time (end selected)
@@ -242,22 +382,28 @@ public class TimeBar extends View {
                 switch(selected.location)
                 {
                     case TOP:
-                        selected.slot.start = yFrac;
+
+                        if(yFrac < selected.slot.end)
+                            selected.slot.start = yFrac;
                         break;
                     case BOTTOM:
-                        selected.slot.end = yFrac;
+                        if(yFrac > selected.slot.start)
+                            selected.slot.end = yFrac;
                         break;
                     case MIDDLE:
                         System.out.println("MIDDLE SELECTED");
                         break;
                 }
-
+                //System.out.println("ACTION_MOVE");
                 break;
 
+            case MotionEvent.ACTION_CANCEL:
+                //System.out.println("ACTION_CANCEL");
+                break;
 
         }
-        this.invalidate();
 
+        this.invalidate();
         return true;
     }
 }
