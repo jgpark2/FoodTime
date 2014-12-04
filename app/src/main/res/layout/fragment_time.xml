@@ -2,7 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kmangutov.foodtime.InviteTabFragment">
+    tools:context="com.kmangutov.foodtime.InviteTabFragment"
+    android:background="@color/color_background">
 
     <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:tools="http://schemas.android.com/tools"
@@ -15,12 +16,12 @@
         tools:context=".MainActivity">
 
         <Button
+            style="@style/button_style"
             android:id="@+id/but_schedule"
             android:layout_width="120dp"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:background="#F0F0FF"
             android:onClick="createEventButton"
             android:text="@string/done"/>
 
@@ -41,6 +42,7 @@
             android:orientation="vertical">
 
             <TextView
+                style="@style/style_text.big"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/meeting_title"/>
@@ -52,6 +54,7 @@
                 android:layout_marginBottom="20dp"/>
 
             <TextView
+                style="@style/style_text.big"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/meeting_location"/>
@@ -61,6 +64,23 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"/>
+
+
+            <TextView
+                style="@style/style_text.big"
+                android:id="@+id/start_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="Start Time"
+                android:layout_marginBottom="40dp"/>
+
+            <TextView
+                style="@style/style_text.big"
+                android:id="@+id/end_time"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:text="End Time"/>
+
 
 
             </LinearLayout>

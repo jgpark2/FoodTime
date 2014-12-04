@@ -1,3 +1,17 @@
-http://www.jayway.com/2012/06/25/creating-custom-android-views-part-1-extending-standard-views-and-adding-new-xml-attributes/
+Let’s Solve Lunch: CS 465 Group #17
+===================================
 
-http://code.tutsplus.com/tutorials/android-sdk-create-a-drawing-app-touch-interaction--mobile-19202
+Andrew Borg, Xi Chen, Harrison Kiang, Kirill Mangutov, Jonathan Park, Isra Sunhachawi
+
+A Study in Mobile User Interface Design
+---------------------------------------
+
+![Poster](http://i.imgur.com/o33S0Kq.png)
+
+Task: Given a problem (in our case, meetup scheduling for a group of individuals), propose a solution and perform user-driven design methodologies to develop a user interface prototype that best highlights our solution's value proposition. 
+
+Screenshots
+---------------------------------------
+![Image](https://imgur.com/Oj2eGX0.png)
+![Image](https://imgur.com/du34TvV.png)
+![Image](https://imgur.com/v3MCBE7.png)

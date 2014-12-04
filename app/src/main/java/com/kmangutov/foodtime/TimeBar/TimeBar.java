@@ -10,6 +10,8 @@ import android.util.Pair;
 import android.view.MotionEvent;
 import android.view.View;
 
+import com.kmangutov.foodtime.R;
+
 import org.joda.time.LocalTime;
 
 import java.util.ArrayList;
@@ -22,6 +24,12 @@ public class TimeBar extends View {
     ArrayList<TimeSlot> mTimeSlots = new ArrayList<TimeSlot>();
     SlotSelection selected = null;
 
+    protected int fgColor = 0;
+    protected int fg2Color = 0;
+    protected int bgColor = 0;
+
+    public TimeBarUpdateListener listener;
+
     public TimeBar(Context context) {
         super(context);
     }
@@ -29,6 +37,13 @@ public class TimeBar extends View {
     public TimeBar(Context context, AttributeSet attrs) {
 
         super(context, attrs);
+        fgColor =
+                context.getResources().getColor(R.color.color_foreground);
+        bgColor =
+                context.getResources().getColor(R.color.color_background);
+        fg2Color =
+                context.getResources().getColor(R.color.color_foreground2);
+
         //addDummyTime(3, 15);
     }
 
@@ -38,6 +53,13 @@ public class TimeBar extends View {
     // determines what fraction of TimeSlot is required to be clicked to identify top or bottom
     //protected float extremitySelectionThreshold = 0.2f;
     protected float mDesiredDragSectionHeight = 50f;
+
+    public TimeSlot getTimeSlot() {
+
+        if(mTimeSlots == null || mTimeSlots.size() == 0)
+            return null;
+        return mTimeSlots.get(0);
+    }
 
     protected float getDragSectionHeight(TimeSlot slot) {
         float slotHeight = (slot.end - slot.start) * getHeight();
@@ -78,12 +100,12 @@ public class TimeBar extends View {
         return new SlotSelection(slot, location);
     }
 
-    protected float timeToFraction(LocalTime time) {
+    protected static float timeToFraction(LocalTime time) {
 
         return time.getHourOfDay()/24.0f + time.getMinuteOfHour()/60.0f/24.0f;
     }
 
-    protected LocalTime fractionToTime(float fraction) {
+    protected static LocalTime fractionToTime(float fraction) {
 
         //prevents app from crashing for extreme upper and lower bounds
         if(fraction < 0)
@@ -109,7 +131,7 @@ public class TimeBar extends View {
         LocalTime start = new LocalTime(hour, minute);
         LocalTime end = new LocalTime(hour + 2, minute + 30);
         TimeSlot slot = new TimeSlot(timeToFraction(start), timeToFraction(end));
-        slot.setColor(color);
+        slot.setColor(fg2Color);//color);
 
         addTimeSlot(slot);
     }
@@ -136,7 +158,7 @@ public class TimeBar extends View {
         paint.setAlpha(255);
 
         paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.BLUE);
+        paint.setColor(fgColor);
         paint.setStrokeWidth(4);
 
         for(TimeSlot slot : mTimeSlots) {
@@ -168,7 +190,7 @@ public class TimeBar extends View {
 
 
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.BLACK);
+        paint.setColor(fg2Color);
         paint.setAlpha(255);
         paint.setStrokeWidth(4);
 
@@ -180,7 +202,7 @@ public class TimeBar extends View {
 
         paint.setStyle(Paint.Style.FILL);
         paint.setStrokeWidth(1);
-        paint.setColor(Color.BLACK);
+        paint.setColor(fg2Color);
 
         canvas.drawText(startStr, myX, y1 - yOffset, paint);
         canvas.drawText(endStr, myX, y2 - yOffset, paint);
@@ -198,9 +220,9 @@ public class TimeBar extends View {
 
         if(selected != null && slot == selected.slot) {
             drawPreciseTime(canvas, slot, paint, x1, y1, y2);
-            paint.setColor(Color.GRAY);
+            paint.setColor(fgColor);
         } else {
-            paint.setColor(slot.color);//Color.BLUE);
+            paint.setColor(fg2Color);//slot.color);//Color.BLUE);
         }
 
 
@@ -356,6 +378,8 @@ public class TimeBar extends View {
                 selected = touchYFracToTimeSlot(yFrac);
 
                 if(selected == null) {
+                    if(mTimeSlots.size() >= 1)
+                        return true;
                     TimeSlot selectedSlot = new TimeSlot(yFrac, yFrac);
                     mTimeSlots.add(selectedSlot);
 
@@ -379,6 +403,10 @@ public class TimeBar extends View {
                     or both if middle is selected
                  */
 
+
+
+                if(selected == null)
+                    return true;
                 switch(selected.location)
                 {
                     case TOP:
@@ -394,6 +422,10 @@ public class TimeBar extends View {
                         System.out.println("MIDDLE SELECTED");
                         break;
                 }
+
+
+                if(this.getContext() instanceof TimeBarUpdateListener)
+                    ((TimeBarUpdateListener)this.getContext()).timeBarUpdate();
                 //System.out.println("ACTION_MOVE");
                 break;
 

@@ -51,7 +51,7 @@ public class FriendActivity extends Activity {
         //ArrayAdapter for friendList array
         ListView myListView = (ListView) findViewById(R.id.friendListView);
         adapter = new FriendListAdapter(this,
-                R.layout.friend_checkbox_layout, vars.getFriendList());
+                R.layout.friend_checkbox_layout, vars.getUser().getFriendList());
         ListView listView = (ListView) findViewById(R.id.friendListView);
 
         listView.setAdapter(adapter);
@@ -91,14 +91,15 @@ public class FriendActivity extends Activity {
                 StringBuffer responseText = new StringBuffer();
                 responseText.append("De-friending the following:\n");
 
-                //GlobalClass vars = (GlobalClass) getApplicationContext();
-                ArrayList<User> friendList = adapter.userList;
+                GlobalClass vars = (GlobalClass) getApplicationContext();
+                ArrayList<User> friendList = vars.getUser().getFriendList(); //ArrayList<User> friendList = adapter.userList;
 
                 for(int i=0;i<friendList.size();i++){
                     User user = friendList.get(i);
                     if(user.isSelected()){
                         responseText.append("\n" + user.getName());
                         friendList.remove(user);
+                        user.removeFriend(vars.getUser());
                         //vars.getFriendList().remove(user);
                         i--;
                     }

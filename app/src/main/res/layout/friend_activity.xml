@@ -4,46 +4,55 @@
         android:orientation="vertical"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        xmlns:android="http://schemas.android.com/apk/res/android">
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:background="@color/color_background">
     <LinearLayout
             android:orientation="horizontal"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
         <TextView
+                style="@style/style_text.big"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="43dp"
                 android:text="Friend List"
-                android:id="@+id/textView" android:autoText="false"
-                android:textSize="@dimen/header_text_size"/>
+                android:textStyle="bold"
+                android:layout_marginLeft="6dp"
+                android:id="@+id/textView" android:autoText="false"/>
         <Space
                 android:layout_width="20px"
                 android:layout_height="20px"
                 />
         <Button
+                style="@style/button_style"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Add Friends"
-                android:id="@+id/but_addFriendList" android:onClick="add_button"/>
+                android:layout_height="match_parent"
+                android:text="Search + Add Friends"
+                android:id="@+id/but_addFriendList" android:onClick="add_button" android:layout_marginTop="4dp"/>
     </LinearLayout>
+    <Space
+            android:layout_width="20px"
+            android:layout_height="20px"
+            />
     <RelativeLayout
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         <Button
+            style="@style/button_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Remove Selected from Friend List"
+            android:text=" Remove from Friend List "
             android:id="@+id/but_delFriendList"
-            android:layout_gravity="center_horizontal"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
-            android:textSize="@dimen/regular_text_size"/>
+            android:layout_marginBottom="10dp"/>
         <ListView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:id="@+id/friendListView"
                 android:layout_gravity="center_horizontal"
-                android:layout_alignParentTop="true"
-                android:stackFromBottom="false" android:layout_above="@+id/but_delFriendList"/>
+                android:stackFromBottom="false" android:layout_above="@+id/but_delFriendList"
+                android:layout_alignParentTop="true"/>
 
     </RelativeLayout>
     />

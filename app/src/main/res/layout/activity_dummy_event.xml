@@ -4,7 +4,8 @@
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.kmangutov.foodtime.DummyEventActivity">
+    tools:context="com.kmangutov.foodtime.DummyEventActivity"
+    android:background="@color/color_background">
 
     <view
         android:layout_width="125dp"
@@ -16,6 +17,7 @@
         android:layout_alignParentEnd="true" />
 
     <TextView
+        style="@style/style_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cravings @ 3pm"
@@ -26,6 +28,7 @@
         android:layout_alignParentStart="true" />
 
     <TextView
+        style="@style/style_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Cravings Restaurant"
@@ -36,6 +39,7 @@
         android:layout_alignStart="@+id/meetingName" />
 
     <TextView
+        style="@style/style_text.big"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -47,6 +51,7 @@
         android:layout_marginTop="32dp" />
 
     <TextView
+        style="@style/style_text.big"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -58,6 +63,7 @@
         android:layout_marginTop="54dp" />
 
     <TextView
+        style="@style/style_text.big"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
@@ -78,13 +84,13 @@
         tools:listitem="@android:layout/simple_list_item_2"
         android:layout_alignParentStart="false" android:layout_above="@+id/button"/>
     <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Accept and Submit"
-            android:id="@+id/button"
-            android:onClick="acceptEvent"
-            android:background="#F0F0FF"
-            android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/eventTimeBar"
-            android:layout_marginRight="40dp"/>
+        style="@style/button_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=" Accept and Submit "
+        android:id="@+id/button"
+        android:onClick="acceptEvent"
+        android:layout_alignParentBottom="true" android:layout_toLeftOf="@+id/eventTimeBar"
+        android:layout_marginRight="40dp"/>
 
 </RelativeLayout>
